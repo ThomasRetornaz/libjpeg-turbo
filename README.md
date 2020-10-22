@@ -2,7 +2,7 @@ Background
 ==========
 
 libjpeg-turbo is a JPEG image codec that uses SIMD instructions to accelerate
-baseline JPEG compression and decompression on x86, x86-64, ARM, PowerPC, and
+baseline JPEG compression and decompression on x86, x86-64, Arm, PowerPC, and
 MIPS systems, as well as progressive JPEG compression on x86 and x86-64
 systems.  On such systems, libjpeg-turbo is generally 2-6x as fast as libjpeg,
 all else being equal.  On other types of systems, libjpeg-turbo can still
@@ -179,8 +179,8 @@ supported and which aren't.
 
 NOTE:  As of this writing, extensive research has been conducted into the
 usefulness of DCT scaling as a means of data reduction and SmartScale as a
-means of quality improvement.  The reader is invited to peruse the research at
-<http://www.libjpeg-turbo.org/About/SmartScale> and draw his/her own conclusions,
+means of quality improvement.  Readers are invited to peruse the research at
+<http://www.libjpeg-turbo.org/About/SmartScale> and draw their own conclusions,
 but it is the general belief of our project that these features have not
 demonstrated sufficient usefulness to justify inclusion in libjpeg-turbo.
 
