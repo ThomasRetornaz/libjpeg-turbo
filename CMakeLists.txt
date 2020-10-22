@@ -141,7 +141,7 @@ macro(boolean_number var)
   endif()
 endmacro()
 
-option(ENABLE_SHARED "Build shared libraries" TRUE)
+option(ENABLE_SHARED "Build shared libraries" FALSE)
 boolean_number(ENABLE_SHARED)
 option(ENABLE_STATIC "Build static libraries" TRUE)
 boolean_number(ENABLE_STATIC)
@@ -163,7 +163,7 @@ option(WITH_MEM_SRCDST "Include in-memory source/destination manager functions w
 boolean_number(WITH_MEM_SRCDST)
 option(WITH_SIMD "Include SIMD extensions, if available for this platform" TRUE)
 boolean_number(WITH_SIMD)
-option(WITH_TURBOJPEG "Include the TurboJPEG API library and associated test programs" TRUE)
+option(WITH_TURBOJPEG "Include the TurboJPEG API library and associated test programs" FALSE)
 boolean_number(WITH_TURBOJPEG)
 
 macro(report_option var desc)
@@ -610,6 +610,7 @@ if(WITH_TURBOJPEG)
         LINK_FLAGS "${TJMAPFLAG}${TJMAPFILE}")
     endif()
 
+    if(JPEG_TURBO_BUILD_TEST)
     add_executable(tjunittest tjunittest.c tjutil.c md5/md5.c md5/md5hl.c)
     target_link_libraries(tjunittest turbojpeg)
 
@@ -621,6 +622,7 @@ if(WITH_TURBOJPEG)
 
     add_executable(tjexample tjexample.c)
     target_link_libraries(tjexample turbojpeg)
+    endif()
   endif()
 
   if(ENABLE_STATIC)
@@ -632,7 +634,7 @@ if(WITH_TURBOJPEG)
     if(NOT MSVC)
       set_target_properties(turbojpeg-static PROPERTIES OUTPUT_NAME turbojpeg)
     endif()
-
+    if(JPEG_TURBO_BUILD_TEST)
     add_executable(tjunittest-static tjunittest.c tjutil.c md5/md5.c
       md5/md5hl.c)
     target_link_libraries(tjunittest-static turbojpeg-static)
@@ -641,6 +643,7 @@ if(WITH_TURBOJPEG)
     target_link_libraries(tjbench-static turbojpeg-static)
     if(UNIX)
       target_link_libraries(tjbench-static m)
+    endif()
     endif()
   endif()
 endif()
@@ -680,7 +683,8 @@ add_executable(wrjpgcom wrjpgcom.c)
 ###############################################################################
 # TESTS
 ###############################################################################
-
+option(JPEG_TURBO_BUILD_TEST OFF)
+if(JPEG_TURBO_BUILD_TEST)
 add_subdirectory(md5)
 
 if(MSVC_IDE OR XCODE)
@@ -1362,12 +1366,13 @@ if(WITH_TURBOJPEG)
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tjbenchtest)
   endif()
 endif()
-
+endif()#test
 
 ###############################################################################
 # INSTALLATION
 ###############################################################################
-
+option(JPEG_TURBO_INSTALL OFF)
+if(JPEG_TURBO_INSTALL)
 set(EXE ${CMAKE_EXECUTABLE_SUFFIX})
 
 if(WITH_TURBOJPEG)
@@ -1452,3 +1457,4 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmakescripts/cmake_uninstall.cmake.i
   "cmake_uninstall.cmake" IMMEDIATE @ONLY)
 
 add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P cmake_uninstall.cmake)
+endif()
