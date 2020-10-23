@@ -165,6 +165,8 @@ option(WITH_SIMD "Include SIMD extensions, if available for this platform" TRUE)
 boolean_number(WITH_SIMD)
 option(WITH_TURBOJPEG "Include the TurboJPEG API library and associated test programs" FALSE)
 boolean_number(WITH_TURBOJPEG)
+option(WITH_EXE "Build jpeg executable" FALSE)
+boolean_number(WITH_EXE)
 
 macro(report_option var desc)
   if(${var})
@@ -659,7 +661,7 @@ else()
   set(DJPEG_BMP_SOURCES wrbmp.c wrtarga.c)
 endif()
 
-if(ENABLE_STATIC)
+if(ENABLE_STATIC AND WITH_EXE)
   add_executable(cjpeg-static cjpeg.c cdjpeg.c rdgif.c rdppm.c rdswitch.c
     ${CJPEG_BMP_SOURCES})
   set_property(TARGET cjpeg-static PROPERTY COMPILE_FLAGS ${COMPILE_FLAGS})
@@ -675,10 +677,10 @@ if(ENABLE_STATIC)
   set_property(TARGET jpegtran-static PROPERTY COMPILE_FLAGS "${USE_SETMODE}")
 endif()
 
-add_executable(rdjpgcom rdjpgcom.c)
-
-add_executable(wrjpgcom wrjpgcom.c)
-
+if(WITH_EXE)
+  add_executable(rdjpgcom rdjpgcom.c)
+  add_executable(wrjpgcom wrjpgcom.c)
+endif()
 
 ###############################################################################
 # TESTS
